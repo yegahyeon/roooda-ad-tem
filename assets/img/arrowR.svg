@@ -1,0 +1,7 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="weui:arrow-outlined">
+<rect x="0.5" y="0.5" width="39" height="39" rx="19.5" fill="white" fill-opacity="0.2"/>
+<rect x="0.5" y="0.5" width="39" height="39" rx="19.5" stroke="#555555"/>
+<path id="Vector" d="M17.433 14.575L18.494 13.515L24.273 19.292C24.3662 19.3846 24.4401 19.4946 24.4906 19.6159C24.541 19.7371 24.567 19.8672 24.567 19.9985C24.567 20.1298 24.541 20.2599 24.4906 20.3811C24.4401 20.5024 24.3662 20.6124 24.273 20.705L18.494 26.485L17.434 25.425L22.858 20L17.433 14.575Z" fill="white"/>
+</g>
+</svg>
