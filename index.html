@@ -89,13 +89,11 @@
             background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.45) 48%,rgba(255,255,255,.1) 56%,transparent 70%);
             transform:translateX(-120%);animation:ctaShine 3.8s ease-in-out 1.6s infinite}
   .fcta-btn:hover{transform:translateY(-3px);filter:drop-shadow(0 0 37.5px rgba(255,255,255,.25)) brightness(1.06)}
-  /* 혜택 말풍선: 위아래로 두둥실, 3초마다 문구 교체 */
+  /* 혜택 말풍선 (선착순 가이드북): 위아래로 두둥실 */
   .fcta-bub{position:relative;display:flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:#fff;color:#111;
             box-shadow:0 10px 28px rgba(0,0,0,.35);white-space:nowrap;animation:bubFloat 2.6s ease-in-out infinite}
   .fcta-bub::after{content:"";position:absolute;left:50%;bottom:-6px;width:14px;height:14px;background:#fff;border-radius:2px;transform:translateX(-50%) rotate(45deg)}
   .fcta-bub img{width:18px;height:18px;flex:none}
-  .fcta-bub-in{display:flex;align-items:center;gap:8px;transition:opacity .3s ease,transform .3s ease}
-  .fcta-bub-in.out{opacity:0;transform:translateY(6px)}
   .fcta-bub .tag{padding:3px 9px;border-radius:999px;background:var(--red2);color:#fff;font-size:12px;font-weight:700;line-height:1.3}
   .fcta-bub .t{font-size:15px;font-weight:600;line-height:1.3}
   @keyframes bubFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
@@ -182,17 +180,10 @@
   /* 문제 카드 */
   /* 세 카드 높이는 가장 긴 카드에 맞춰 항상 동일 */
   .pcards{display:flex;gap:17px;align-items:stretch;color:#d4d4d4;text-align:center}
-  /* 세로선: 스크롤에 맞춰 --p(0~1) 만큼 그려짐 */
-  .vline::after{content:"";position:absolute;left:0;top:0;width:1px;height:calc(var(--p, 1) * 100%);background:#fff}
-  /* "이렇게 말하던가요?": 스크롤로 단어 등장 → 다 나오면 '말하던가요?' 가 빨갛게 빛나며 밑줄 + 흔들림 */
-  .ask-in,.ask-w,.ask-q{display:inline-block}
-  .ask-hl{position:relative;transition:color .35s ease,text-shadow .35s ease}
-  .ask-hl::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:5px;border-radius:3px;background:var(--red);
-                 transform:scaleX(0);transform-origin:left;transition:transform .55s cubic-bezier(.2,.8,.2,1) .1s}
-  .ask-hl.on{color:#ff5757;text-shadow:0 0 28px rgba(255,59,48,.65)}
-  .ask-hl.on::after{transform:scaleX(1)}
+  .vline::after{content:"";position:absolute;left:0;top:0;width:1px;height:0;background:#fff;transition:height 1.2s cubic-bezier(.2,.7,.2,1)}
+  .vline.in::after{height:100%}
   /* "반은 맞고 / 반은 완전히 틀렸습니다." 두 줄 따로 등장 */
-  .hf-a,.hf-b,.hf-x{display:inline-block}
+  .hf-a,.hf-b{display:inline-block}
   .s-ln{display:block}
 
   /* 실소비자 브러시 동그라미: 마스크 획을 따라 그려지는 효과 */
@@ -230,8 +221,14 @@
   .funnel-glow{width:300px;height:220px;translate:-50% -50%;border-radius:50%;pointer-events:none;opacity:0;
                background:radial-gradient(closest-side,rgba(255,59,48,.55),rgba(255,59,48,0));filter:blur(14px)}
   .funnel-glow.on{animation:funnelBreathe 2.6s ease-in-out infinite}
+  .funnel-ripples{overflow:visible;pointer-events:none}
+  .funnel-ripples polygon{fill:none;stroke:var(--red);stroke-width:3;stroke-linejoin:round;transform-box:fill-box;transform-origin:50% 40%;opacity:0}
+  .funnel-ripples.on polygon{animation:funnelRipple 2.4s ease-out infinite}
+  .funnel-ripples.on polygon:nth-child(2){animation-delay:.8s}
+  .funnel-ripples.on polygon:nth-child(3){animation-delay:1.6s}
+  @keyframes funnelRipple{0%{opacity:.9;scale:1}100%{opacity:0;scale:2.4}}
   @keyframes funnelBreathe{0%,100%{opacity:.35;scale:.85}50%{opacity:.9;scale:1.08}}
-  @media (prefers-reduced-motion:reduce){.funnel-glow.on{animation:none;opacity:.8}}
+  @media (prefers-reduced-motion:reduce){.funnel-glow.on{animation:none;opacity:.8}.funnel-ripples.on polygon{animation:none}}
 
   /* heartbeat (Animista) */
   .heartbeat{animation:pulsate-bck 1.5s ease-in-out infinite both; box-shadow: 0px 0px 4px 7px #ffffff}
@@ -317,6 +314,7 @@
   #cases .swiper-slide{width:533.4px;display:flex;justify-content:center}
   .case{display:flex;align-items:center;transform-origin:center;transition:filter .5s ease}
   /* 가운데에서 비켜난 앨범은 살짝 어둡게 (깊이감) */
+  #cases .swiper-slide .case{transition:filter .35s ease}
   #cases .swiper-slide:not(.swiper-slide-active) .case{filter:brightness(.7)}
   .cb{background:#e9e9e9;width:207px;margin-right:-10px;padding:20px;border-radius:8px 0 0 8px;display:flex;flex-direction:column;gap:30px;align-items:center}
   .pill{border-radius:40px;padding:3px 14px;color:#fff;font-size:12px;line-height:normal;text-transform:capitalize}
@@ -504,7 +502,7 @@
         <div class="fill" style="background:linear-gradient(179.87deg,transparent .12%,#000 99.88%)"></div>
       </div>
       <div class="a chip ia" style="left:66px;top:47px"><span>광고비 </span><span>2026.10</span><b>-3,000,000</b></div>
-      <div class="a chip ia" style="left:285px;top:160px"><span>광고비 </span><span>2026.10</span><b>-3,750,000,</b></div>
+      <div class="a chip ia" style="left:285px;top:160px"><span>광고비 </span><span>2026.10</span><b>-3,750,000</b></div>
       <div class="a chip ia" style="left:27px;top:218px"><span>광고비 </span><span>2026.11</span><b>-2,350,000</b></div>
       <div class="a money ia" style="left:0px;top:157px;width:73px;height:71px">
         <div class="wing fill" style="overflow:hidden;transform:scaleX(-1)">
@@ -673,7 +671,7 @@
     <p style="font-size:30px;height:45px">또는</p>
     <p class="nw" style="font-size:60px">연차 높은 마케터가</p>
   </div>
-    <p class="a cx w7 tc nw" id="agAsk" style="left:960.5px;top:838px;color:#fff;font-size:50px;line-height:1.5"><span class="ask-in"><span class="ask-w">이렇게</span> <span class="ask-w ask-hl">말하던가요<span class="ask-q">?</span></span></span></p>
+    <p class="a cx w7 tc nw" id="agAsk" style="left:960.5px;top:838px;color:#fff;font-size:50px;line-height:1.5">이렇게 말하던가요?</p>
     <div class="a cx bubble" id="agBubL" style="left:826px;top:509px">
     <img src="./assets/img/tailL.svg" loading="lazy" decoding="async" alt="" class="a" style="left:30px;top:53px;width:52.5px;height:59.5px">
     키워드는 일단 많이 깔아둘수록 좋습니다.
@@ -682,7 +680,7 @@
     예산은 여러 상품에<br>균등하게 나눠서 테스트해봐야 합니다.
     <img src="./assets/img/tailR.svg" loading="lazy" decoding="async" alt="" class="a" style="left:303.5px;top:86px;width:52.5px;height:59.5px;transform:scaleX(-1)">
   </div>
-    <p class="a cx w7 tc nw mshift" id="agHalf" style="left:961px;top:1290px;color:#fff;font-size:40px;line-height:1.5;--ms:250px"><span class="hf-a">반은 맞고</span><br><span class="hf-b">반은 <span class="hf-x">완전히 틀렸습니다.</span></span></p>
+    <p class="a cx w7 tc nw mshift" id="agHalf" style="left:961px;top:1290px;color:#fff;font-size:40px;line-height:1.5;--ms:250px"><span class="hf-a">반은 맞고</span><br><span class="hf-b">반은 완전히 틀렸습니다.</span></p>
     <div class="a vline mshift" style="left:960px;top:1016px;width:1px;height:150px;--ms:125px"></div>
     <div class="a cx pcards mshift" style="left:959px;top:1515px;--ms:250px">
     <div class="pcard"><h4>무의미한<br>키워드 나열</h4><p> 돈만 새어나가는<br>전환 0건짜리<br>키워드 수백 개</p></div>
@@ -727,6 +725,10 @@
     <span style="top:192px;color:#999">3</span>
     <div class="funnel-tip"><span style="top:7.5px;color:#fff">4</span></div>
   </div>
+    <!-- 4단계 파동: 같은 모양의 삼각 테두리가 바깥으로 퍼지며 사라짐 (4단계가 켜진 뒤 .on) -->
+    <svg class="a funnel-ripples" id="funnelRipples" viewBox="0 0 390 350" aria-hidden="true" style="left:765px;top:801px;width:390px;height:350px">
+      <polygon points="146.25,262.5 243.75,262.5 195,350"/><polygon points="146.25,262.5 243.75,262.5 195,350"/><polygon points="146.25,262.5 243.75,262.5 195,350"/>
+    </svg>
     <div class="a cx" style="left:960.5px;top:1288.75px;width:379px"><div class="line"><img src="./assets/img/line24.svg" loading="lazy" decoding="async" alt=""></div></div>
   </div>
 </section>
@@ -977,8 +979,8 @@
 
 <!-- ============ 떠 있는 신청 CTA (인트로를 지나면 올라오고, 페이지 신청폼·푸터가 보이면 내려감) ============ -->
 <div class="fcta" id="floatCta">
-  <div class="fcta-bub" aria-live="polite">
-    <span class="fcta-bub-in" id="fctaBub"><span class="tag">혜택 1</span><span class="t">집행중인 검색광고 무료 진단</span></span>
+  <div class="fcta-bub">
+    <span class="tag">선착순 10명</span><span class="t">맞춤형 키워드 세팅 가이드북(PDF)</span>
     <img src="./assets/img/check.svg" alt="">
   </div>
   <button class="fcta-btn js-cta" type="button">내 광고계정 무료 진단받기</button>
@@ -1040,7 +1042,7 @@ const FORM_ENDPOINT = "";
     const emChars = em.querySelectorAll('.ch');
 
     // timeScale: 인트로 등장 전체 속도 (1 = 원래 속도, 1.3 = 약 30% 빠르게). 돈이 떠다니는 반복 움직임은 별도라 영향 없음
-    const tl = gsap.timeline({delay:.2}).timeScale(1.3);
+    const tl = gsap.timeline({delay:.2}).timeScale(1.6);
     // 1) 통장이 아래에서 살짝 떠오름
     tl.fromTo(book, {opacity:0, y:50, scale:.96}, {opacity:.7, y:0, scale:1, duration:1.1, ease:'power3.out'});
     // 2) 광고비 내역이 날짜 순서대로 한 줄씩 찍히듯 내려앉음
@@ -1113,8 +1115,26 @@ const FORM_ENDPOINT = "";
     const v = {...STACK};
     gsap.to(v, {rotate:FLOW.rotate, stretch:FLOW.stretch, depth:FLOW.depth, duration:1.4, ease:'expo.out', onUpdate:() => applyFlow(v)});
   }
+  // 펼쳐지면서 카드가 한 바퀴(9장) 부드럽게 돌고, 천천히 멈춰 한 장이 가운데 활성화됨.
+  // 한 칸씩 끊어 넘기지 않고, 0→9 로 이어지는 위치값 하나를 GSAP 로 움직임:
+  // 정수 칸을 넘을 때마다 즉시 다음 칸으로 옮겨(루프 재배치 포함) 기준을 갱신하고, 소수 부분만큼 그 사이를 직접 이동
+  function spin(){
+    const size = Math.abs(swiper.snapGrid[1] - swiper.snapGrid[0]);
+    const v = {p:0};
+    let done = 0, base = swiper.translate;
+    swiper.allowTouchMove = false;
+    swiper.setTransition(0);
+    gsap.to(v, {p:swiper.slides.length, duration:2.6, ease:'power2.inOut',
+      onUpdate(){
+        const whole = Math.floor(v.p);
+        while (done < whole) { swiper.slideNext(0); done++; base = swiper.translate; }
+        swiper.setTranslate(base - (v.p - whole) * size);
+      },
+      onComplete(){ swiper.slideToLoop(swiper.realIndex, 0); swiper.allowTouchMove = true; }});
+  }
   // (면적 비율 기준은 모바일에서 캐러셀이 화면보다 넓어 절반을 못 채우므로, 화면 위치 기준으로 트리거)
-  if (!reduce) ScrollTrigger.create({trigger:host, start:'top 75%', once:true, refreshPriority:-1, onEnter:() => setTimeout(fanOut, 200)});   // 위쪽 고정 장면들보다 먼저 만들어지므로, 위치는 그 뒤에 계산되게
+  if (!reduce) ScrollTrigger.create({trigger:host, start:'top 75%', once:true, refreshPriority:-1,   // 위쪽 고정 장면들보다 먼저 만들어지므로, 위치는 그 뒤에 계산되게
+    onEnter:() => setTimeout(() => { if (spread) return; fanOut(); setTimeout(spin, 350); }, 200)});
   // 펼쳐지기 전에 넘기면 바로 펼침 (사용자 조작 이벤트만)
   ['touchStart','navigationNext','navigationPrev'].forEach(ev => swiper.on(ev, fanOut));
   // 아트보드가 축소돼 있으니 드래그 거리도 같은 비율로 맞춰 카드가 손가락을 그대로 따라오게 함
@@ -1184,24 +1204,6 @@ const FORM_ENDPOINT = "";
   }
   lenis.on('scroll', updateFloat);
   window.addEventListener('scroll', updateFloat, {passive:true});
-
-  /* ---- 떠 있는 CTA 말풍선: 아래 신청폼의 혜택 문구를 3초마다 차례로 보여줌 ---- */
-  (function(){
-    const bub = $('fctaBub');
-    const items = [...document.querySelectorAll('.benefit li .l')].map(l => ({tag:l.querySelector('.tag').textContent.trim(), t:l.querySelector('.t').textContent.trim()}));
-    if (items.length < 2) return;
-    let i = 0;
-    setInterval(() => {
-      if (!floatCta.classList.contains('show')) return;
-      bub.classList.add('out');
-      setTimeout(() => {
-        i = (i + 1) % items.length;
-        bub.querySelector('.tag').textContent = items[i].tag;
-        bub.querySelector('.t').textContent = items[i].t;
-        bub.classList.remove('out');
-      }, 300);
-    }, 3000);
-  })();
 
   /* ======== 스크롤 고정 장면 (페이지 위에서부터 순서대로 만들어야 아래 트리거 위치가 맞음) ======== */
 
@@ -1429,7 +1431,7 @@ const FORM_ENDPOINT = "";
 
   /* ---- 퍼널: 1→2→3 단계가 차례로 채워지고 4단계가 빨갛게 켜짐 → 알약이 이어 받음 → 4단계 뒤 붉은 빛이 숨쉬듯 ---- */
   (function(){
-    const funnel = $('funnel'), pill = $('funnelPill'), glow = $('funnelGlow');
+    const funnel = $('funnel'), pill = $('funnelPill'), glow = $('funnelGlow'), ripples = $('funnelRipples');
     const bands = [...funnel.querySelectorAll('.funnel-tri i')].slice(0, 3);
     const nums = [...funnel.querySelectorAll(':scope > span')];
     const tip = funnel.querySelector('.funnel-tip'), tipNum = tip.querySelector('span');
@@ -1453,7 +1455,7 @@ const FORM_ENDPOINT = "";
         {background:'#ff7871', scale:1, filter:'brightness(1)', duration:.45, ease:'power2.inOut'}],
         transformOrigin:'50% 40%', clearProps:'filter,transform',
         // 점등이 끝나면 기존 하트비트 시작 (둘 다 크기를 움직이므로 겹치지 않게 점등 후에)
-        onComplete:() => tip.classList.add('heartbeat')}, 1.15)
+        onComplete:() => { tip.classList.add('heartbeat'); ripples.classList.add('on'); }}, 1.15)
       .to(tipNum, {opacity:1, duration:.3}, 1.3)
       .to(pill, {opacity:1, y:0, duration:.6, ease:'power3.out'}, 1.45)
       .add(() => glow.classList.add('on'), 1.5);
@@ -1467,61 +1469,30 @@ const FORM_ENDPOINT = "";
   },{threshold:.15});
   document.querySelectorAll('.rv, #chart, #brushSvg').forEach(el=>io.observe(el));
 
-  /* ---- 대행사의 말 ~ 문제 카드: 스크롤에 맞춰 천천히 하나씩 등장 (위로 스크롤하면 되감김) ---- */
+  /* ---- 대행사의 말 ~ 문제 카드: 화면에 들어오면 묶음별로 위에서부터 차례로 살짝 떠오름 (한 번만) ---- */
   (function(){
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const st = (trigger, start, end, extra) => ({trigger, start, end, scrub:1, ...extra});
+    const vline = document.querySelector('#agency .vline');
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) { vline.classList.add('in'); return; }
     // .cx 요소는 transform 으로 가운데 정렬돼 있어 이동은 translate 속성으로만
-    const up = (dist) => ({opacity:0, translate:`0px ${dist}px`, filter:'blur(8px)'});
-    const rest = {opacity:1, translate:'0px 0px', filter:'blur(0px)'};
+    function seq(trigger, els, gap = .25, delay = 0, onComplete){
+      gsap.set(els, {opacity:0, translate:'0px 40px'});
+      ScrollTrigger.create({trigger, start:'top 80%', once:true,
+        onEnter:() => gsap.to(els, {opacity:1, translate:'0px 0px', duration:.8, stagger:gap, delay, ease:'power2.out', onComplete})});
+    }
+    seq('#agHead', '#agHead p');                          // 대행사 → 또는 → 연차 높은 마케터가
 
-    // 1) "대행사 / 또는 / 연차 높은 마케터가" 한 줄씩
-    gsap.timeline({scrollTrigger:st('#agHead', 'top 85%', 'bottom 45%')})
-      .fromTo('#agHead p', up(50), {...rest, stagger:.35, ease:'power2.out'});
-
-    // 2) 말풍선: 왼쪽 → 오른쪽 차례로, 각자 자기 쪽에서 밀려 들어옴
-    // (말풍선 그림자 filter 는 유지한 채 흐림만 풀어줌)
-    const bubShadow = 'drop-shadow(0px 0px 5.25px #b8b8b8)';
-    const bubRest = {...rest, filter:`${bubShadow} blur(0px)`, ease:'power2.out'};
-    gsap.timeline({scrollTrigger:st('#agBubL', 'top 85%', 'top 35%', {endTrigger:'#agBubR'})})
-      .fromTo('#agBubL', {opacity:0, translate:'-80px 30px', filter:`${bubShadow} blur(8px)`}, bubRest)
-      .fromTo('#agBubR', {opacity:0, translate:'80px 30px', filter:`${bubShadow} blur(8px)`}, bubRest, '+=.15');
-
-    // 3) "이렇게 말하던가요?": 단어가 크게 떨어지듯 등장 → 끝까지 나오면 강조 연출
-    const ask = $('agAsk'), askIn = ask.querySelector('.ask-in'), hl = ask.querySelector('.ask-hl'), q = ask.querySelector('.ask-q');
-    gsap.timeline({scrollTrigger:st(ask, 'top 85%', 'top 60%')})
-      .fromTo(ask.querySelectorAll('.ask-w'), {opacity:0, y:-40, scale:1.6, filter:'blur(10px)'},
-              {opacity:1, y:0, scale:1, filter:'blur(0px)', stagger:.4, ease:'power3.out'});
-    const punch = gsap.timeline({paused:true})
-      .add(() => hl.classList.add('on'))
-      .to(askIn, {keyframes:{x:[0,-10,10,-7,7,-3,0]}, duration:.5, ease:'none'}, .05)
-      .fromTo(askIn, {scale:1}, {scale:1.12, duration:.18, yoyo:true, repeat:1, ease:'power2.out'}, .05)
-      .to(q, {keyframes:{rotate:[0,-22,18,-10,0]}, duration:.7, ease:'sine.inOut'}, .15);
-    ScrollTrigger.create({trigger:ask, start:'top 58%',
-      onEnter:() => punch.restart(),
-      onLeaveBack:() => { punch.pause(0); hl.classList.remove('on'); }});
-
-    // 4) 세로선이 위에서 아래로 그어짐
-    gsap.fromTo('.vline', {'--p':0}, {'--p':1, ease:'none', scrollTrigger:st('.vline', 'top 80%', 'bottom 55%')});
-
-    // 5) "반은 맞고" 먼저 → 한 박자 쉬고 "반은 완전히 틀렸습니다." 가 쾅 하고 들어오며 빨갛게
-    const half = $('agHalf');
-    gsap.timeline({scrollTrigger:st(half, 'top 85%', 'top 40%')})
-      .fromTo(half.querySelector('.hf-a'), up(40), {...rest, duration:1, ease:'power2.out'})
-      .fromTo(half.querySelector('.hf-b'), {opacity:0, scale:1.8, filter:'blur(12px)'}, {opacity:1, scale:1, filter:'blur(0px)', duration:1, ease:'back.out(1.6)'}, '+=.6')
-      .fromTo(half.querySelector('.hf-x'), {color:'#fff', textShadow:'0 0 0 rgba(255,59,48,0)'}, {color:'#ff5757', textShadow:'0 0 24px rgba(255,59,48,.6)', duration:.6}, '-=.3');
-
-    // 6) "그 결과 ~" 문장
-    gsap.fromTo('#agResult', up(40), {...rest, ease:'power2.out', scrollTrigger:st('#agResult', 'top 88%', 'top 65%')});
-
-    // 7) 문제 카드 3장: 하나씩 올라오고, 새 카드가 들어올 때마다 앞 카드는 살짝 어두워져 시선이 차례로 이동 → 마지막엔 모두 밝게
-    const cards = gsap.utils.toArray('.pcards .pcard');
-    const ctl = gsap.timeline({scrollTrigger:st('.pcards', 'top 92%', 'top 42%')});
-    cards.forEach((c, i) => {
-      ctl.fromTo(c, {opacity:0, y:80, scale:.9}, {opacity:1, y:0, scale:1, duration:1, ease:'back.out(1.4)'}, i * 1.1);
-      if (i > 0) ctl.to(cards.slice(0, i), {opacity:.45, duration:.5}, i * 1.1);
-    });
-    ctl.to(cards, {opacity:1, duration:.6}, '+=.2');
+    // 이렇게 말하던가요?: 말풍선 두 개가 다 나온 뒤, 문장이 화면 아래쪽에 충분히 들어왔을 때 아래에서 크게 떠오름
+    // (둘 중 늦게 충족되는 쪽에서 재생)
+    let bubDone = false, askReady = false;
+    const askTw = gsap.fromTo('#agAsk', {opacity:0, translate:'0px 120px'},
+                              {opacity:1, translate:'0px 0px', duration:1.2, ease:'power3.out', paused:true});
+    const playAsk = () => { if (bubDone && askReady) gsap.delayedCall(.25, () => askTw.play()); };
+    seq('#agBubL', ['#agBubL', '#agBubR'], .45, 0, () => { bubDone = true; playAsk(); });   // 왼쪽 말풍선 → 오른쪽 말풍선
+    ScrollTrigger.create({trigger:'#agAsk', start:'top 72%', once:true, onEnter:() => { askReady = true; playAsk(); }});
+    ScrollTrigger.create({trigger:vline, start:'top 80%', once:true, onEnter:() => vline.classList.add('in')});
+    seq('#agHalf', '#agHalf .hf-a, #agHalf .hf-b', .6);   // 반은 맞고 → 반은 완전히 틀렸습니다.
+    seq('#agResult', '#agResult');
+    seq('.pcards', '.pcards .pcard', .3, .2);              // 카드 3장 왼쪽부터 차례로
   })();
 
   /* ---- 문제 카드: 스크롤 시 흐려지고 → "이게 정말 맞는 걸까요?" 상승 ---- */
